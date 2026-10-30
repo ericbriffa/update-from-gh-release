@@ -27,6 +27,11 @@ desktop shortcut — works anywhere with bash, curl, and python3.
    /home/deck/bin/update-from-gh-release.sh /home/deck/bin/myapp.conf
    ```
 
+   With `--ask`, a newer release shows this prompt before the game starts;
+   it picks "Play now" after `ASK_TIMEOUT` seconds:
+
+   ![Update prompt](docs/ask-dialog.png)
+
 Keep the script and config file(s) **outside** the install dir (e.g. `~/bin`) so game updates don't overwrite it.
 
 ## How it works
