@@ -34,13 +34,11 @@ Keep the script and config file(s) **outside** the install dir (e.g. `~/bin`) so
 - Finds the one release asset matching `ASSET_PATTERN` (regex) and
   compares its tag to the installed version.
 - Verifies a checksum asset first, if `CHECKSUM_PATTERN` is set.
-- Unpacks `.tar.*` / `.zip`, or installs a raw single-file asset
-  (AppImage, etc.) as `RAW_NAME`.
-- Copies over the install dir
-- `--ask` mode: rechecks GitHub at most every `CHECK_EVERY` seconds,
-  prompts via zenity, and always falls through to launching the game
-  (slow network, offline, decline, or no zenity installed all just play).
-- If installed, zenity provides dialog prompts (packaged with SteamOS)
+- Unpacks the `.tar.*` / `.zip` asset (an archive holding a single folder
+  installs that folder's contents) and copies it over the install dir.
+- `--ask` mode: checks GitHub on each launch, prompts via zenity, and always
+  falls through to launching the game (offline, decline, timeout, errors, or
+  no zenity/display all just play).
 
 ## Config
 
@@ -63,12 +61,7 @@ Optional:
 | `CHECKSUM_PATTERN`    | Regex for a checksum asset; if set, download must verify.  |
 | `REQUIRED_FILE`       | Must exist in the new version (layout sanity check).       |
 | `RUNNING_MATCH`       | `pgrep -f` pattern; refuses to update while it matches.     |
-| `STRIP_TOP_DIR`       | `auto` (default) drops the archive's top-level folder; `0` keeps it. |
-| `RAW_NAME`            | Install name for a raw (non-archive) asset.                |
-| `INCLUDE_PRERELEASES` | `1` to consider pre-releases.                               |
-| `CHECK_EVERY`         | Seconds between GitHub checks in `--ask` mode (default: 1 day). |
-| `ASK_TIMEOUT`         | Seconds before the update prompt auto-dismisses (default: 10). |
-| `NET_TIMEOUT_ASK`     | Network timeout in `--ask` mode (default: 3).               |
+| `ASK_TIMEOUT`         | Seconds before a dialog closes on its own (default: 10).   |
 
 `GITHUB_TOKEN`, if set in the environment, authenticates GitHub API
 requests (avoids rate limiting).
@@ -76,4 +69,5 @@ requests (avoids rate limiting).
 ## Requirements
 
 `bash`, `curl`, `python3`, and `unzip` or `bsdtar` (for `.zip` assets).
-`zenity` is optional, for dialogs — without it, messages go to stderr.
+`zenity` is optional, for dialogs — without it, or without a display (cron,
+ssh), messages go to stderr.
